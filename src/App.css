@@ -1,0 +1,294 @@
+/* Fullscreen background video */
+.bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.top-tabs {
+  position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 12px; padding: 8px 12px;
+  background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 999px; backdrop-filter: blur(6px); z-index: 999;
+}
+.tab {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 12px; border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 999px; color: #fff; background: rgba(255,255,255,0.10);
+  font-weight: 600; cursor: pointer;
+}
+/* Mini player layout & spacing */
+.mini-player {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  width: min(520px, calc(100% - 32px));
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 14px;
+  padding: 12px 14px;             /* + a bit more padding */
+  color: #fff;
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+}
+
+.np-title {
+  font-weight: 600;
+  margin-bottom: 10px;            /* more space above the bar */
+  letter-spacing: 0.06em;         /* wider letter spacing */
+}
+
+.progress-row, .controls-row {
+  display: grid;
+  grid-template-columns: 68px 1fr 68px; /* wider fixed columns for time labels */
+  align-items: center;
+  gap: 14px;                       /* more gap so the bar never touches text */
+  margin-top: 8px;
+}
+
+.time {
+  width: 68px;                     /* consistent width prevents overlap */
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.9;
+  letter-spacing: 0.06em;          /* spacing for the numbers too */
+}
+
+/* ===== Progress bar: choose BLACK or LIGHT GRAY ===== */
+
+/* === SHARED slider track (progress + volume) === */
+.player-progress,
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #111;              /* black track */
+  border-radius: 999px;
+  outline: none;
+}
+
+/* --- Upload Dropzone --- */
+.dropzone {
+  position: relative;
+  width: 100%;
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 16px;
+
+  /* white, semi-transparent square */
+  background: rgba(255,255,255,0.18);
+  border: 2px dashed rgba(255,255,255,0.85);
+  border-radius: 16px;
+
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dropzone:hover {
+  background: rgba(255,255,255,0.24);
+}
+
+.dropzone.is-over {
+  background: rgba(255,255,255,0.32);
+  border-color: #ffffff;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35), inset 0 0 0 2px rgba(255,255,255,0.25);
+}
+
+.dz-inner {
+  display: grid;
+  gap: 8px;
+  align-items: center;
+  justify-items: center;
+}
+
+.dz-icon {
+  font-size: 28px;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+}
+
+.dz-title {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.dz-sub {
+  opacity: 0.9;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.dz-button {
+  margin-top: 6px;
+}
+
+
+.player-progress::-webkit-slider-runnable-track,
+.volume-slider::-webkit-slider-runnable-track { height: 8px; background: #111; border-radius: 999px; }
+.player-progress::-moz-range-track,
+.volume-slider::-moz-range-track { height: 8px; background: #111; border-radius: 999px; }
+
+/* Light gray variant (use class 'light' on either input) */
+.player-progress.light,
+.volume-slider.light { background: #e6e6e6; }
+.player-progress.light::-webkit-slider-runnable-track,
+.volume-slider.light::-webkit-slider-runnable-track { background: #e6e6e6; }
+.player-progress.light::-moz-range-track,
+.volume-slider.light::-moz-range-track { background: #e6e6e6; }
+
+/* === Shared thumb === */
+.player-progress::-webkit-slider-thumb,
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #fff; border: 1px solid rgba(0,0,0,0.35);
+  margin-top: -3px;               /* centers on 8px track */
+}
+.player-progress::-moz-range-thumb,
+.volume-slider::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #fff; border: 1px solid rgba(0,0,0,0.35);
+}
+
+/* Keep volume a nice width; remove width if you want it full-width */
+.volume-slider { width: 140px; }
+.form-grid { display: grid; gap: 10px; }
+.form-row { display: grid; gap: 6px; }
+.form-row input, .form-row select, .form-row textarea {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 10px; color: #fff; padding: 10px;
+}
+
+
+.tab:hover { background: rgba(255,255,255,0.18); }
+.tab.active { box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+.tab-icon { width: 18px; height: 18px; object-fit: contain; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3)); }
+
+
+/* Subtle dark overlay so form is readable */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 1;
+}
+
+/* Card override for your login/register box */
+.auth-form-container {
+  position: relative;       /* make sure it sits above overlay */
+  z-index: 10;              /* above video */
+  width: min(420px, 90vw);
+  background: rgba(20,20,20,0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 3rem 2rem;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+/* Adjust error text color */
+.error {
+  color: #ff6b6b;
+  margin: 0.25rem 0;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bg-video { display: none; }
+  .overlay { background: #000; }
+}
+
+
+.App {
+  text-align: center;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: black;
+}
+
+.auth-form-container, .login-form, .register-form {
+  display:flex;
+  flex-direction: column;
+
+}
+
+@font-face {
+
+  font-family: 'Bits';
+
+  src: url('C:/Users/deadt/Downloads/BEATWARS/BEATWARS-main/ByteBounce.ttf');
+}
+
+
+
+
+
+
+
+.auth-form-container{
+  padding: 5rem;
+  border: 1px solid white;
+  border-radius: 10px;
+  margin: 0.5rem;
+}
+
+
+label{
+  text-align: left;
+  padding: 0.25rem 0;
+}
+
+input{
+  font-family: 'Bits';
+  font-size: 20px;
+  margin: 0.5rem 0;
+  padding: 1rem;
+  border: none;
+  border-radius: 10px;
+}
+
+button{
+  font-family: 'Bits';
+  font-size: 20px;
+  border: none;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #000000;
+}
+
+.link-btn{
+  background: none;
+  color: white;
+  text-decoration: underline;
+}
+
+
+.Logo{
+  position: absolute;
+  left: 20px;
+  top: 10px;
+}
+
+
+/* === Login Video Background === */
+.login-wrap {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+

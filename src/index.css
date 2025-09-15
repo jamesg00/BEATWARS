@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  font-family: 'Bits';
+  src: url('C:/Users/deadt/Downloads/BEATWARS/BEATWARS-main/ByteBounce.ttf');
+  font-size: 30px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
